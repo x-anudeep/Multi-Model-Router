@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "enterprise-llm-gateway"
+version = "0.1.0"
+description = "Provider-agnostic LLM gateway with task-aware routing, fallback handling, and cost telemetry."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Anudeep" }]
+dependencies = [
+  "fastapi>=0.110",
+  "pydantic>=2.6",
+  "uvicorn[standard]>=0.27",
+  "streamlit>=1.31",
+  "pandas>=2.1",
+  "httpx>=0.26",
+  "python-dotenv>=1.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "pytest-cov>=4.1",
+  "ruff>=0.3"
+]
+
+[project.scripts]
+llm-gateway-api = "llm_gateway.api.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
