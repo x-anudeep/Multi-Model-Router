@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterator
+from pathlib import Path
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 from llm_gateway.adapters import ProviderError
 from llm_gateway.config import MODEL_CATALOG
@@ -20,6 +22,13 @@ app = FastAPI(
     description="Provider-agnostic LLM gateway with routing, fallback, and cost telemetry.",
 )
 gateway = LLMGateway()
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.get("/", include_in_schema=False)
+def frontend() -> FileResponse:
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/health")
@@ -81,4 +90,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
