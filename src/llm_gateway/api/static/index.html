@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Enterprise LLM Gateway</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-row">
+          <div class="brand-mark">LLM</div>
+          <div>
+            <p class="eyebrow">Enterprise Gateway</p>
+            <h1>Multi-Model Router</h1>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <span class="pulse"></span>
+          <div>
+            <p class="status-label">API Status</p>
+            <strong id="apiStatus">Checking</strong>
+          </div>
+        </div>
+
+        <nav class="nav-stack" aria-label="Dashboard sections">
+          <a href="#console">Request Console</a>
+          <a href="#metrics">Metrics</a>
+          <a href="#models">Model Catalog</a>
+          <a href="#ledger">Ledger</a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <section class="hero-panel">
+          <div>
+            <p class="eyebrow">Python / FastAPI / Streamlit / SQLite / LLM APIs</p>
+            <h2>Provider-agnostic LLM gateway with cost-aware routing.</h2>
+            <p class="hero-copy">
+              Unified access across OpenAI, Anthropic, Google, Cohere, and Bedrock with
+              task classification, fallback handling, and request telemetry.
+            </p>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <span>5</span>
+              <p>Providers</p>
+            </div>
+            <div>
+              <span>8</span>
+              <p>Models</p>
+            </div>
+            <div>
+              <span>3</span>
+              <p>Fallback Tiers</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="console" class="grid console-grid">
+          <form class="panel request-panel" id="requestForm">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Route Request</p>
+                <h3>Prompt Console</h3>
+              </div>
+              <button class="ghost-button" type="button" id="sampleButton">Sample</button>
+            </div>
+            <label for="prompt">Prompt</label>
+            <textarea id="prompt" name="prompt" rows="7">Summarize why an enterprise LLM gateway reduces cost and improves reliability.</textarea>
+            <div class="form-row">
+              <div>
+                <label for="taskType">Task</label>
+                <select id="taskType" name="taskType">
+                  <option value="">Auto classify</option>
+                  <option value="chat">Chat</option>
+                  <option value="reasoning">Reasoning</option>
+                  <option value="coding">Coding</option>
+                  <option value="vision">Vision</option>
+                  <option value="summarization">Summarization</option>
+                  <option value="embedding">Embedding</option>
+                </select>
+              </div>
+              <div>
+                <label for="maxTokens">Max Tokens</label>
+                <input id="maxTokens" name="maxTokens" type="number" min="64" max="8192" step="64" value="512" />
+              </div>
+            </div>
+            <button class="primary-button" type="submit">Run Gateway</button>
+          </form>
+
+          <article class="panel response-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Selected Route</p>
+                <h3 id="routeTitle">Waiting for request</h3>
+              </div>
+              <span class="pill" id="fallbackDepth">Depth 0</span>
+            </div>
+            <div class="response-body" id="responseBody">Send a prompt to see the selected provider, model, cost, and latency.</div>
+            <div class="response-meta">
+              <div><span>Task</span><strong id="taskMeta">-</strong></div>
+              <div><span>Latency</span><strong id="latencyMeta">-</strong></div>
+              <div><span>Cost</span><strong id="costMeta">-</strong></div>
+              <div><span>Tokens</span><strong id="tokensMeta">-</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="metrics" class="metric-grid">
+          <article class="metric-card">
+            <span>Total Calls</span>
+            <strong id="totalRequests">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Success Rate</span>
+            <strong id="successRate">0%</strong>
+          </article>
+          <article class="metric-card">
+            <span>Avg Latency</span>
+            <strong id="avgLatency">0 ms</strong>
+          </article>
+          <article class="metric-card">
+            <span>Total Cost</span>
+            <strong id="totalCost">$0.000000</strong>
+          </article>
+        </section>
+
+        <section id="models" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Routing Inventory</p>
+              <h3>Model Catalog</h3>
+            </div>
+          </div>
+          <div class="model-grid" id="modelGrid"></div>
+        </section>
+
+        <section id="ledger" class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">SQLite Telemetry</p>
+              <h3>Recent Request Ledger</h3>
+            </div>
+            <button class="ghost-button" type="button" id="refreshButton">Refresh</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Provider</th>
+                  <th>Model</th>
+                  <th>Task</th>
+                  <th>Status</th>
+                  <th>Latency</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody id="ledgerRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
