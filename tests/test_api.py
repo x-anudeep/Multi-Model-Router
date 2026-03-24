@@ -10,6 +10,13 @@ def test_health_endpoint() -> None:
     assert response.json()["status"] == "ok"
 
 
+def test_frontend_route_serves_html() -> None:
+    response = TestClient(app).get("/")
+
+    assert response.status_code == 200
+    assert "Enterprise LLM Gateway" in response.text
+
+
 def test_completion_endpoint() -> None:
     response = TestClient(app).post(
         "/v1/chat/completions",
@@ -18,4 +25,3 @@ def test_completion_endpoint() -> None:
 
     assert response.status_code == 200
     assert response.json()["task_type"] == "summarization"
-
